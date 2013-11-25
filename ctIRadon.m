@@ -1,15 +1,17 @@
 
-function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
+function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
+  dx, dy, filterWin )
   % Written by Nicholas Dwork
   % sinogram: each row corresponds to a theta, each column to a detector
   % thetas: a 1D array of thetas corresponding to each sinogram row
   % dSize: the size of each detector in meters
   % cx: center x position of reconstructed region
   % cy: center y position of reconstructed region
-  % xFOV: horizontal field of view in meters
-  % yFOV: vertical field of view in meters
   % Nx: number of pixels horizontally in reconstruction
   % Ny: number of pixels vertically in reconstruction
+  % dx: the horizontal size of each pixel in meters
+  % dy: the vertical size of each pixel in meters
+  % filterWin: the window to be applied to the ramp filter
 
 
   nThetas = size(sinogram,1);
@@ -25,12 +27,29 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
   h(oddNs) = -1 ./ ( n(oddNs).*n(oddNs) * pi*pi * dSize*dSize );
   zeroIndx = find( n==0 );
   h(zeroIndx) = 1/(4*dSize*dSize);
-
   nPadded = 2*nDetectors;
   hZP = zeros(1,nPadded);
   hZP(1:nDetectors) = h;
-  hZP = ones(nThetas,1) * hZP;
 
+  if numel(filterWin)>0
+    if strcmp(filterWin,'Hanning')
+
+      df = 1 / ( dSize * nPadded );
+      halfP = floor(nPadded / 2) + 1;
+      fIndxs = ([1:nPadded] - halfP);
+      f = df .* fIndxs;
+      absF = abs(f);
+
+      fN = 1./(2*dSize);
+      hannWin = 0.5.*(1+cos(pi .* absF ./ fN));
+      hannWin = hannWin .* ( absF < fN );
+      fftHZP = fftshift( fft(hZP) );
+      filtFftHZP = fftHZP .* hannWin;
+      hZP =  ifft( ifftshift( filtFftHZP) );
+    end
+  end
+
+  hZP = ones(nThetas,1) * hZP;
   sinoZP = zeros(nThetas, nPadded);
   sinoZP(:,1:nDetectors) = sinogram;
 

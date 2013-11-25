@@ -34,7 +34,7 @@ function recon = ctIRadon2DFT( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 
   if strcmp(window,'Hanning')
     fN = 1./(2*dSize);
     hannWin = 0.5.*(1+cos(pi .* absK ./ fN));
-    hannWin = hannWin .* abs( absK < fN );
+    hannWin = hannWin .* ( absK < fN );
     filter = filter .* hannWin;
   end
 

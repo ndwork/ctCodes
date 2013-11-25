@@ -21,7 +21,7 @@ function ctTest
   cx = 0;   Nx=256;   dx=delta;
   cy = 0;   Ny=256;   dy=delta;
 
-  recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy );
+  recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
   figure( 'name', 'Reconstruction' );
   imshow( recon, [] );
 
