@@ -12,8 +12,7 @@ function ctTest
   dSize = 0.001;
   dTheta = 1 * pi/180;
   thetas = 0:dTheta:pi-dTheta;
-  %sinogram = ctRadon( object.im, object.delta, nDetectors, dSize, thetas );
-load 'sinogram.mat';
+  sinogram = ctRadon( object.im, object.delta, nDetectors, dSize, thetas );
 
   figure( 'name', 'sinogram' );
   imshow( sinogram, [] );
@@ -29,4 +28,5 @@ load 'sinogram.mat';
   recon2DFT = ctIRadon2DFT( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'none' );
   figure( 'name', '2DFT Reconstruction' );
   imshow( recon2DFT, [] );
-%end
+
+end

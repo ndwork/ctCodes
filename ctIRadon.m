@@ -15,9 +15,9 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
   nThetas = size(sinogram,1);
   nDetectors = size(sinogram,2);
 
-
   %% Filter the sinogram
-  n = ( [0:nDetectors-1] - floor(0.5*nDetectors) );
+  cn = floor( 0.5 * nDetectors );
+  n = ( [0:nDetectors-1] - cn );
   %dLocs = n * dSize;
 
   h = zeros( 1, numel(n) );
@@ -25,7 +25,7 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
   h(oddNs) = -1 ./ ( n(oddNs).*n(oddNs) * pi*pi * dSize*dSize );
   zeroIndx = find( n==0 );
   h(zeroIndx) = 1/(4*dSize*dSize);
-  
+
   nPadded = 2*nDetectors;
   hZP = zeros(1,nPadded);
   hZP(1:nDetectors) = h;
@@ -39,12 +39,12 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
 
   fftFiltSino = fftH .* fftSino;
   filtSino = dSize * ifft( fftFiltSino, [], 2 );
-  filtSino = circShift( filtSino, [0 -zeroIndx] );
+  filtSino = circShift( filtSino, [0 -zeroIndx+1] );
   filtSino = filtSino(:,1:nDetectors);
 
 
   %% Perform backprojection
   out = ctBackProject( filtSino, thetas, dSize, cx, cy, Nx, Ny, dx, dy );
   out = out * pi / nThetas;
-  
+
 end

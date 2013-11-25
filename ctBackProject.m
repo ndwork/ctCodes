@@ -19,14 +19,20 @@ function bp = ctBackProject( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
   dLocs = ( [0:nDetectors-1] - floor(0.5*nDetectors) ) * dSize - dOffset;
 
   % Make arrays of x and y positions of each pixel
-  lineXs = ( [0:Nx-1] - floor(0.5*Nx) ) * dx;
-  lineYs = ( [0:Ny-1] - floor(0.5*Ny) ) * dy;
-  NLxs = numel(lineXs);
-  NLys = numel(lineYs);
-  xs = ones(NLys,1) * lineXs;
-  ys = lineYs' * ones(1,NLxs);
-  xs=xs(:);
-  ys=ys(:);
+  if mod( Nx, 2 )==0
+    lineXs = ( ([0:Nx-1]) - 0.5*Nx + 0.5 ) * dx + cx;
+  else
+    lineXs = ( ([0:Nx-1]) - floor(0.5*Nx) ) * dx + cx;
+  end
+  if mod( Ny, 2 )==0
+    lineYs = ( ([0:Ny-1]) - 0.5*Ny + 0.5 ) * dy + cy;
+  else
+    lineYs = ( ([0:Ny-1]) - floor(0.5*Ny) ) * dy + cy;
+  end
+  xs = ones(Ny,1) * lineXs;
+  ys = lineYs' * ones(1,Nx);
+  xs=xs(:) + cx;
+  ys=ys(:) + cy;
 
   angles = atan2(ys,xs);
   pixDs = sqrt( xs.*xs + ys.*ys );
@@ -45,4 +51,3 @@ function bp = ctBackProject( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy )
   end
 
 end
-

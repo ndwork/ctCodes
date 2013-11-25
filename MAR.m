@@ -3,7 +3,9 @@ clc
 clear
 close all
 
-dataFile='Siemens_FromEdBoas/precalc_Hep.bin';
+dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
+dataFile=[dataDir,'Siemens_FromEdBoas\precalc_Hep.bin'];
+
 sliceIndx=5;
 
 if numel( dataFile ) > 0
