@@ -76,5 +76,7 @@ reconWav=marWav(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning'
 %%
 
 reconRubbed=rubOut(recon,21000);
+%%
 
+reconMDTed=mdt(recon,21000);
 
