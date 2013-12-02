@@ -68,9 +68,14 @@ end
 %figure('name','ctIRadon recon'),imshow(recon,[])
 
 %%
+%sizeSino=size(sino);
+%marwavRecon=marWav(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning');
+%figure('name','marWav recon'), imshow( marwavRecon, [] );
+
+%%
 sizeSino=size(sino);
-marwavRecon=marWav(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning');
-figure('name','marWav recon'), imshow( marwavRecon, [] );
+marwavRadRecon=marWavRad(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning');
+figure('name','marWavRad recon'), imshow( marwavRadRecon, [] );
 
 %%
 ruboutRecon=rubOut(recon,21000);
