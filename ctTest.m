@@ -2,17 +2,17 @@
 function ctTest
   clear; close all;
 
+  im = phantom();
   delta = 0.001;
-  object = createPhantom(delta, [0,0], 0.01);
 
   figure( 'name', 'Original Image' );
-  imshow( object.im, [] );
+  imshow( im, [] );
 
   nDetectors = 500;
   dSize = 0.001;
   dTheta = 1 * pi/180;
   thetas = 0:dTheta:pi-dTheta;
-  sinogram = ctRadon( object.im, object.delta, nDetectors, dSize, thetas );
+  sinogram = ctRadon( im, delta, nDetectors, dSize, thetas );
 
   figure( 'name', 'sinogram' );
   imshow( sinogram, [] );
@@ -29,4 +29,8 @@ function ctTest
   figure( 'name', '2DFT Reconstruction' );
   imshow( recon2DFT, [] );
 
+  sinogram2 = ctRadon( recon, delta, nDetectors, dSize, thetas );
+  figure( 'name', 'Sinogram 2' );
+  imshow( sinogram2, [] );
+  
 end

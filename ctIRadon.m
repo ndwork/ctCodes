@@ -31,7 +31,7 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
   hZP = zeros(1,nPadded);
   hZP(1:nDetectors) = h;
 
-  if numel(filterWin)>0
+  if nargin > 9
     if strcmp(filterWin,'Hanning')
 
       df = 1 / ( dSize * nPadded );

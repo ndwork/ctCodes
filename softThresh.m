@@ -1,13 +1,13 @@
-function xhat=softThresh(y,lambda)
 
-xhat=zeros(size(y));
+function xHat = softThresh( y, lambda )
+  if nargin<2 lambda=0.1; end;
 
-for i=1:length(y)
-    if(y(i) < -1*lambda)
-        xhat(i)=y(i)+lambda;
-    elseif(y(i) > lambda)
-        xhat(i)=y(i)-lambda;
-    elseif(abs(y(i))<lambda)
-        xhat(i)=0;
-    end
+  xHat = zeros(size(y));
+  absY = abs(y);
+
+  gtIndxs = find( absY > lambda );
+  if numel(gtIndxs)>0
+    xHat(gtIndxs) = ( absY(gtIndxs) - lambda ) ./ absY(gtIndxs) .* y(gtIndxs);
+  end
+
 end
