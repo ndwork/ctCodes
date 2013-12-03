@@ -18,18 +18,24 @@ load( 'sinoMask.mat' );
   
   % scale sinogram so that max is 1
   sino = sinogram;
+  sino=sino-min(sino(:));
   sino = sino / max(sino(:));
 
   tolerance = 1d-3;
   diff = tolerance + 1;
   nIter = 0;
+  
+  aIndxs=find(dLocs>=0);
+  a=dLocs(aIndxs);
   while( diff > tolerance && nIter < 1000 )
     oldSino = sino;
 
-    ids = idsTransform( sino, dLocs, thetas, dLocs, thetas );
-    stIDS = softThresh( ids, 0.05 );
+    ids = idsTransform( sino, dLocs, thetas, a(1:2:end), thetas(1:4:end) );
+%     load('ids.mat');
+%     stIDS = softThresh( ids, 0.05 );
+    stIDS=ids;
 
-    sino = dsTransform( stIDS, dLocs, thetas, dLocs, thetas );
+    sino = dsTransform( stIDS, a(1:2:end), thetas(1:4:end), dLocs(1:2:end), thetas(1:4:end) );
     sino = (sino .* sinoMask) + (stIDS .* (1-sinoMask));
 
     imwrite( sino, ['tmp/sino',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
