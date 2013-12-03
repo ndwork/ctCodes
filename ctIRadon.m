@@ -58,7 +58,7 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
 
   fftFiltSino = fftH .* fftSino;
   filtSino = dSize * ifft( fftFiltSino, [], 2 );
-  filtSino = circShift( filtSino, [0 -zeroIndx+1] );
+  filtSino = circshift( filtSino, [0 -zeroIndx+1] );
   filtSino = filtSino(:,1:nDetectors);
 
 
