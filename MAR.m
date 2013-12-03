@@ -3,7 +3,9 @@ clear
 close all
 
 %dataDir = 'C:\Users\ndwork\Desktop\';
-dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
+% dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
+% dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
+dataDir = 'C:\Users\Uzair\SkyDrive\Stanford Docs\EE 369C\Project\';
 dataFile=[dataDir,'Siemens_FromEdBoas\precalc_Hep.bin'];
 
 sliceIndx=5;
@@ -64,8 +66,8 @@ else
 end
 
 %%
-%recon=ctIRadon(sino, thetas, dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
-%figure('name','ctIRadon recon'),imshow(recon,[])
+recon=ctIRadon(sino, thetas, dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
+figure('name','ctIRadon recon'),imshow(recon,[])
 
 %%
 %sizeSino=size(sino);
@@ -82,5 +84,9 @@ ruboutRecon=rubOut(recon,21000);
 figure('name','rubOut recon'), imshow( ruboutRecon, [] );
 
 %%
-reconMDTed=mdt(recon,21000);
+% reconMDTed=mdt(recon,21000);
+reconMDTed=mdt(recon,50);
 
+%%
+sizeSino=size(sino);
+mardsRecon=marDS(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');

@@ -6,12 +6,12 @@ function recon = marWavRad( sinogram, thetas,nDetectors, dSize, cx, cy, ...
   mkdir('tmp');
 
   % determine the sinogram mask
-  %recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
-  %metalMask=findMetal(recon,50);
-  %sinoMask = ctRadon( metalMask, dx, nDetectors, dSize, thetas );
-  %sinoMask = ( sinoMask == 0 );
-load( 'recon.mat' );
-load( 'sinoMask.mat' );
+  recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
+  metalMask=findMetal(recon,50);
+  sinoMask = ctRadon( metalMask, dx, nDetectors, dSize, thetas );
+  sinoMask = ( sinoMask == 0 );
+% load( 'recon.mat' );
+% load( 'sinoMask.mat' );
 
   % scale sinogram so that max is 1
   sino = sinogram;
