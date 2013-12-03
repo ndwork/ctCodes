@@ -3,7 +3,7 @@ function recon = marWavRad( sinogram, thetas,nDetectors, dSize, cx, cy, ...
   Nx, Ny, dx, dy, window )
 
   W = Wavelet;
-  mkdir('tmp');
+  mkdir('tmp_marWavRad');
 
   % determine the sinogram mask
   recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
@@ -41,8 +41,15 @@ function recon = marWavRad( sinogram, thetas,nDetectors, dSize, cx, cy, ...
     padSino = ( padSino .* padMask ) + (stSino .* (1-padMask));
 
     sino = padSino(1:sinoY,1:sinoX);
-    imwrite( sino, ['tmp/sino',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
-    save( ['tmp/wSino',num2str(nIter,'%4.4i'),'.mat'], 'wSino' );
+    imwrite( sino, ['tmp_marWavRad/sino',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
+    save( ['tmp_marWavRad/wSino',num2str(nIter,'%4.4i'),'.mat'], 'wSino' );
+
+    if mod(nIter,25)==0
+      recon = ctIRadon( sino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
+      recon = recon - min(recon(:));
+      recon = recon / max( recon(:) );
+      imwrite( recon, ['tmp_marWavRad/recon',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
+    end
 
     diff = norm( padSino - oldSino );
     disp(['Difference Value: ', num2str(diff) ]);
@@ -50,6 +57,6 @@ function recon = marWavRad( sinogram, thetas,nDetectors, dSize, cx, cy, ...
     nIter = nIter + 1;
   end
 
-  recon = ctIRadon( reconSino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
+  recon = ctIRadon( sino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
   
 end
