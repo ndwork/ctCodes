@@ -10,7 +10,9 @@ function  dsInterped   = dsInterp(dsIn, threshold)
 metalMask = dsIn >= threshold;
 
 metalMask=imdilate(metalMask,strel('disk',1,8));
-metalMask=imerode(metalMask,strel('disk',1,8));
+metalMask=imdilate(metalMask,strel('disk',1,8));
+
+% metalMask=imerode(metalMask,strel('disk',1,8));
 
 metalIndxs = find( metalMask );
 nonmetalIndxs = find( ~metalMask );

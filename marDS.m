@@ -1,9 +1,6 @@
 
-function recon = marDS( sinogram, thetas, nDetectors, dSize, cx, cy, ...
+function dsRecon = marDS( sinogram, thetas, nDetectors, dSize, cx, cy, ...
   Nx, Ny, dx, dy, window )
-
-  W = Wavelet;
-  mkdir('tmp');
 
   % determine the sinogram mask
   %recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
@@ -39,26 +36,25 @@ load 'dsMatrix.mat';
 load 'lut.mat';
 
   % Inverse DS transform
-  ids = dsMatrix \ sino(:);
-  ids = reshape( ids, nA, nThetas );
-
-junk = causeError()
+  %ids = dsMatrix \ sino(:);
+  %ids = lsqr( dsMatrix, sino(:) ,1d-6,100);
+  %ids = reshape( ids, nA, nThetas );
+load ids.mat;
+  
+  idsInterp=dsInterp(ids,0.007);
 
   % DS transform
-  sino = dsMatrix * stIDS(:);
+  sino = dsMatrix * idsInterp(:);
   sino = reshape( sino, nThetas, nDetectors );
-  
-  sino = dsTransform( stIDS, a(1:2:end), thetas(1:4:end), dLocs(1:2:end), thetas(1:4:end) );
-  sino = (sino .* sinoMask) + (stIDS .* (1-sinoMask));
-  
-  imwrite( sino, ['tmp/sino',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
-  
-  diff = norm( sino - oldSino );
-  disp(['Difference Value: ', num2str(diff) ]);
-  
-  nIter = nIter + 1;
 
-  recon = ctIRadon( sino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, window );
+  %sino = (sino .* sinoMask) + (stIDS .* (1-sinoMask));
+
+  dsRecon = ctIRadon( sino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, window );
+  
+  figure('name','Orig Recon');
+  imshow( recon, [] );
+  figure('name','Ds Recon');
+  imshow( dsRecon, [] );
   
 end
 
