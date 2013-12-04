@@ -6,12 +6,12 @@ function recon = marDS( sinogram, thetas, nDetectors, dSize, cx, cy, ...
   mkdir('tmp');
 
   % determine the sinogram mask
-  recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
-  metalMask=findMetal(recon,50);
-  sinoMask = ctRadon( metalMask, dx, nDetectors, dSize, thetas );
-  sinoMask = ( sinoMask == 0 );
-save( 'recon.mat', 'recon' );
-save( 'sinoMask.mat', 'sinoMask' );
+  %recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
+  %metalMask=findMetal(recon,50);
+  %sinoMask = ctRadon( metalMask, dx, nDetectors, dSize, thetas );
+  %sinoMask = ( sinoMask == 0 );
+load 'recon.mat';
+load 'sinoMask.mat';
 
   dOffset = 0;
   dLocs = ( [0:nDetectors-1] - floor(0.5*nDetectors) ) * dSize - dOffset;
@@ -32,13 +32,11 @@ save( 'sinoMask.mat', 'sinoMask' );
   nThetas = numel( thetas );
 
 
-  dsMatrix = makeDsMatrix( a, thetas, dLocs, thetas );
-save( 'dsMatrix.mat', 'dsMatrix' );
-return;
+  %dsMatrix = makeDsMatrix( a, thetas, dLocs, thetas );
 load 'dsMatrix.mat';
 
-  lut = makeDsLUT( a(1:2:end), thetas(1:4:end), dLocs(1:2:end), thetas(1:4:end) );
-save( 'lut.mat', 'lut' );
+  %lut = makeDsLUT( a(1:2:end), thetas(1:4:end), dLocs(1:2:end), thetas(1:4:end) );
+load 'lut.mat';
 
   % Inverse DS transform
   ids = dsMatrix \ sino(:);
