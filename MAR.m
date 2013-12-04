@@ -5,8 +5,8 @@ close all
 %dataDir = 'C:\Users\ndwork\Desktop\';
 % dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
 % dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
-%dataDir = 'C:\Users\Uzair\SkyDrive\Stanford Docs\EE 369C\Project\';
-dataDir = '../data/';
+dataDir = 'C:\Users\Uzair\SkyDrive\Stanford Docs\EE 369C\Project\';
+% dataDir = '../data/';
 dataFile=[dataDir,'/Siemens_FromEdBoas/precalc_Hep.bin'];
 
 disp(['dataFile: ', dataFile]);
@@ -68,10 +68,21 @@ else
   phant=createPhantom(delta, [0, 0], 0.05 );
   sino=ctRadon(phant.im,delta,NumDet,dSize,thetas);
 end
+%%
+sizeSino=size(sino);
+
+[rubbedSino,sinoMask]=rubOutSino(sino,50,thetas,sizeSino(2),dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
+reconRubbed=ctIRadon(rubbedSino, thetas, dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
+
 
 %%
 %recon=ctIRadon(sino, thetas, dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
 %figure('name','ctIRadon recon'),imshow(recon,[])
+
+%%
+%sizeSino=size(sino);
+reconNonMetal=ctIRadonMetal(sino,thetas,dSize,0,0,512,512,delta,delta,'Hanning');
+figure,imshow(reconNonMetal,[]);
 
 %%
 %sizeSino=size(sino);
