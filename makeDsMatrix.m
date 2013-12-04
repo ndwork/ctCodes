@@ -21,13 +21,19 @@ function dsMatrix = makeDsMatrix( A, phi, x, y )
     dsIn = zeros(nA,nPhi);
     dsIn(i) = 1;
     dsOut = dsTransform( dsIn, A, phi, x, y );
+
     nonzeroIndxs = find( dsOut ~= 0 );
-    colIndxs( (i-1)*Ny + 1 : i*Ny ) = colImg( nonzeroIndxs );
-    rowIndxs( (i-1)*Ny + 1 : i*Ny ) = rowImg( nonzeroIndxs );
+
+    colIndxs( (i-1)*Ny + 1 : i*Ny ) = i;
+    rowIndxs( (i-1)*Ny + 1 : i*Ny ) = nonzeroIndxs;
     values( (i-1)*Ny + 1 : i*Ny ) = dsOut( nonzeroIndxs );
   end
 
-  dsMatrix = sparse( rowIndxs, colIndxs, values );
+save( 'rowIndxs.mat', 'rowIndxs' );
+save( 'colIndxs.mat', 'colIndxs' );
+save( 'values.mat', 'values' );
+
+  dsMatrix = sparse( rowIndxs, colIndxs, values, Ny*Nx, nA*nPhi );
 end
 
 
