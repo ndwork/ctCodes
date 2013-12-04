@@ -42,6 +42,8 @@ load 'lut.mat';
   ids = dsMatrix \ sino(:);
   ids = reshape( ids, nA, nThetas );
 
+junk = causeError()
+
   % DS transform
   sino = dsMatrix * stIDS(:);
   sino = reshape( sino, nThetas, nDetectors );
