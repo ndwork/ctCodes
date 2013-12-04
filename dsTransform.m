@@ -12,17 +12,14 @@ function out = dsTransform( img, A, phi, x, y )
   out = zeros( Ny, Nx );
 
   for aIndx = 1:nA  
-    disp(['dsTransform: A=' num2str(A(aIndx))]);
 
-    parfor phiIndx = 1:nPhi
+    for phiIndx = 1:nPhi
       T = img( aIndx, phiIndx );
       if T==0 continue; end;
 
-      thisA = A;
-      thisY = y;
       tmp = zeros(Ny,Nx);
       for yIndx = 1:Ny
-        traj = thisA(aIndx) * sin( thisY(yIndx) + phi(phiIndx) );
+        traj = A(aIndx) * sin( y(yIndx) + phi(phiIndx) );
         if traj < minX || traj > maxX continue; end;
         dist = abs( traj - x );
         [~, minIndx] = min( dist );
@@ -33,8 +30,6 @@ function out = dsTransform( img, A, phi, x, y )
 
     end
     
-    imshow( out, [] );
-    drawnow
   end
 
 end

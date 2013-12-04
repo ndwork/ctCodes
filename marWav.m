@@ -30,7 +30,9 @@ function recon = marWav( sinogram, thetas,nDetectors, dSize, cx, cy, ...
     reconSino = ( reconSinogram .* sinoMask ) + (newSino .* (1-sinoMask));
     recon = ctIRadon( reconSino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
 
-    imwrite( reconSino, ['tmp/reconSino',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
+    outSino = reconSino - min(reconSino(:));
+    outSino = outSino / max(outSino(:));
+    imwrite( outSino, ['tmp/reconSino',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
     imwrite( recon, ['tmp/recon',num2str(nIter,'%4.4i'),'.jpg'], 'jpeg' );
 
     diff = norm( recon - oldRecon );
