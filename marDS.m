@@ -32,8 +32,8 @@ load 'sinoMask.mat';
   %dsMatrix = makeDsMatrix( a, thetas, dLocs, thetas );
 load 'dsMatrix.mat';
 
-  %lut = makeDsLUT( a(1:2:end), thetas(1:4:end), dLocs(1:2:end), thetas(1:4:end) );
-load 'lut.mat';
+  lut = makeDsLUT( a, thetas, dLocs, thetas );
+save( 'lut.mat', 'lut' );
 
   % Inverse DS transform
   %ids = dsMatrix \ sino(:);
@@ -41,15 +41,20 @@ load 'lut.mat';
   %ids = reshape( ids, nA, nThetas );
 load ids.mat;
   
-  idsInterp=dsInterp(ids,0.007);
+  %idsInterp=dsInterp(ids,0.007);
+
+  idsInterp = dsInterpLUT( ids, 0.007, lut );
+save( 'idsInterp.mat', 'idsInterp' );
 
   % DS transform
   sino = dsMatrix * idsInterp(:);
   sino = reshape( sino, nThetas, nDetectors );
+save( 'sino.mat', 'sino' );
 
   %sino = (sino .* sinoMask) + (stIDS .* (1-sinoMask));
 
   dsRecon = ctIRadon( sino, thetas, dSize, cx, cy, Nx, Ny, dx, dy, window );
+save( 'dsRecon.mat', 'dsRecon' );
   
   figure('name','Orig Recon');
   imshow( recon, [] );
@@ -57,4 +62,9 @@ load ids.mat;
   imshow( dsRecon, [] );
   
 end
+
+
+
+
+
 
