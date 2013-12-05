@@ -4,13 +4,13 @@ function radonMatrix = makeRadonMatrix( Ny, Nx, delta, ...
 
   nThetas = numel( thetas );
 
-  nPossible = 10000;
+  nPossible = 100000;
   rowIndxs = zeros(1,nPossible);
   colIndxs = zeros(1,nPossible);
   values = zeros(1,nPossible);
 
   nValues = 0;
-  nIncrease = 10000;
+  nIncrease = 100000;
   for i=1:Ny*Nx
     in = zeros( Ny, Nx );
     in(i) = 1;
@@ -20,23 +20,28 @@ function radonMatrix = makeRadonMatrix( Ny, Nx, delta, ...
     nNonzero = numel( nonzeroIndxs );
     if nNonzero == 0 continue; end;
 
-    while nValues + nNonzero > nPossible
-      newRowIndxs = zeros(1,nPossible+nIncrease);
-      newColIndxs = zeros(1,nPossible+nIncrease);
-      newValues = zeros(1,nPossible+nIncrease);
+    if nValues + nNonzero > nPossible
+      while nValues + nNonzero > nPossible
+        newRowIndxs = zeros(1,nPossible+nIncrease);
+        newColIndxs = zeros(1,nPossible+nIncrease);
+        newValues = zeros(1,nPossible+nIncrease);
+        nPossible = nPossible + nIncrease;
+      end
       
-      newRowIndxs(1:nValues) = rowIndxs;
-      newColIndxs(1:nValues) = colIndxs;
-      newValues(1:nValues) = values;
-      
+      if nValues > 0
+        newRowIndxs(1:nValues) = rowIndxs;
+        newColIndxs(1:nValues) = colIndxs;
+        newValues(1:nValues) = values;
+      end
       rowIndxs = newRowIndxs;
       colIndxs = newColIndxs;
       values = newValues;
+
     end
-    
-    rowIndxs(nValues+1:nValues+1+nNonzero) = nonzeroIndxs;
-    colIndxs(nValues+1:nValues+1+nNonzero) = i;
-    values(nValues+1:nValues+1+nNonzero) = sino(nonzeroIndxs);
+
+    rowIndxs(nValues+1:nValues+nNonzero) = nonzeroIndxs;
+    colIndxs(nValues+1:nValues+nNonzero) = i;
+    values(nValues+1:nValues+nNonzero) = sino(nonzeroIndxs);
   end
 
 save( 'rowIndxs.mat', 'rowIndxs' );
