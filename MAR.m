@@ -3,9 +3,9 @@ clear
 close all
 
 %dataDir = 'C:\Users\ndwork\Desktop\';
-%dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
+dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
 %dataDir = 'C:\Users\Uzair\SkyDrive\Stanford Docs\EE 369C\Project\';
-dataDir = '../data/';
+%dataDir = '../data/';
 dataFile=[dataDir,'/Siemens_FromEdBoas/precalc_Hep.bin'];
 
 disp(['dataFile: ', dataFile]);
@@ -106,5 +106,10 @@ end
 %reconMDTed=mdt(recon,50);
 
 %%
+%sizeSino=size(sino);
+%mardsRecon=marDS(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
+
+%%
 sizeSino=size(sino);
-mardsRecon=marDS(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
+mardsRecon=marPC(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
+
