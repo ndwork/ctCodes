@@ -12,6 +12,7 @@ function radonMatrix = makeRadonMatrix( Ny, Nx, delta, ...
   nValues = 0;
   nIncrease = 100000;
   for i=1:Ny*Nx
+    disp(['makeRadonMatrix ', num2str(i), ' of ', num2str(Ny*Nx)]);
     in = zeros( Ny, Nx );
     in(i) = 1;
     sino = ctRadon( in, delta, nDetectors, dSize, thetas );
