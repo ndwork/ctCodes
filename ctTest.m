@@ -8,11 +8,13 @@ function ctTest
   figure( 'name', 'Original Image' );
   imshow( im, [] );
 
+  type = 'fast';
+
   nDetectors = 500;
   dSize = 0.001;
   dTheta = 1 * pi/180;
   thetas = 0:dTheta:pi-dTheta;
-  sinogram = ctRadon( im, delta, nDetectors, dSize, thetas );
+  sinogram = ctRadon( im, delta, nDetectors, dSize, thetas, type );
 
   figure( 'name', 'sinogram' );
   imshow( sinogram, [] );
@@ -20,6 +22,11 @@ function ctTest
   % Reconstruction parameters
   cx = 0;   Nx=256;   dx=delta;
   cy = 0;   Ny=256;   dy=delta;
+
+  bp = ctBackProject( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
+    dx, dy, type );
+  figure( 'name', 'Back Projection' );
+  imshow( bp, [] );
 
   recon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, dx, dy, 'Hanning' );
   figure( 'name', 'Reconstruction' );

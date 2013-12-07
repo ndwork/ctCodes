@@ -111,5 +111,5 @@ end
 
 %%
 sizeSino=size(sino);
-mardsRecon=marPC(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
+mardsRecon=marCP(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
 

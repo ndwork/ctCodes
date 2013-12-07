@@ -1,6 +1,6 @@
 
 function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
-  dx, dy, filterWin )
+  dx, dy, window )
   % Written by Nicholas Dwork
   % sinogram: each row corresponds to a theta, each column to a detector
   % thetas: a 1D array of thetas corresponding to each sinogram row
@@ -32,7 +32,7 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
   hZP(1:nDetectors) = h;
 
   if nargin > 9
-    if strcmp(filterWin,'Hanning')
+    if strcmp(window,'Hanning')
 
       df = 1 / ( dSize * nPadded );
       halfP = floor(nPadded / 2) + 1;
