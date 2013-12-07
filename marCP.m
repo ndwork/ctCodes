@@ -1,6 +1,6 @@
 
 function recon = marCP( sinogram, thetas,nDetectors, dSize, cx, cy, ...
-  Nx, Ny, dx, dy, window )
+  Nx, Ny, delta, window )
 
   % Sigma and tau are parameters
   nrmK = sqrt(6);
@@ -16,10 +16,10 @@ function recon = marCP( sinogram, thetas,nDetectors, dSize, cx, cy, ...
 
   % Define function handles -------------------------------------------
   
-  applyK = @(x) ctBackProject( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
-    dx, dy, 'iso' );
-  applyKTrans = @(y) ctRadon( img, delta, nDetectors, dSize, thetas, ...
+  applyK = @(y) ctRadon( y, delta, nDetectors, dSize, thetas, ...
     'iso' );
+  applyKTrans = @(x) ctBackProject( x, thetas, dSize, cx, cy, Nx, Ny, ...
+    delta, delta, 'iso' );
 
   computeYnp1 = @(yn,xnBar,sigma) ...
     computeYnp1_deblurImageTightFrame_pockChambolle_shearlet( ...
@@ -33,7 +33,11 @@ function recon = marCP( sinogram, thetas,nDetectors, dSize, cx, cy, ...
 
   % Perform Metal Artifact Reduction
 
-  reconSino = chamboullePock( sinogram, applyK, applyKTrans, computeYnp1, ...
+  %seedRecon = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
+  %  dx, dy, window, 'fast' );
+seedRecon=0;  load 'seedRecon.mat';
+  
+  reconSino = chamboullePock( seedRecon, applyK, applyKTrans, computeYnp1, ...
     sigma, tau, computeCost );
 
   recon = ctIRadon( reconSino, thetas, dSize, cx, cy, Nx, Ny, ...
@@ -50,9 +54,11 @@ function recon = marCP( sinogram, thetas,nDetectors, dSize, cx, cy, ...
     p.addRequired('applyK');
     p.addRequired('applyKTrans');
     p.addRequired('computeYnp1');
+    p.addRequired('sigma');
+    p.addRequired('tau');
     p.addOptional('computeCost','none');
 
-    p.parse( img, applyK, applyKTrans, computeYnp1, computeCost );
+    p.parse( img, applyK, applyKTrans, computeYnp1, sigma, tau, computeCost );
     inputs = p.Results;
     computeCost = inputs.computeCost;
 
@@ -62,6 +68,7 @@ function recon = marCP( sinogram, thetas,nDetectors, dSize, cx, cy, ...
 
     theta = 1;
 
+    maxIter = 30;
     costs = zeros(1,maxIter+1);
     for n = 1:maxIter
 
