@@ -1,6 +1,6 @@
 
 function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
-  dx, dy, window, type )
+  dx, dy, varargin )
   % Written by Nicholas Dwork
   % sinogram: each row corresponds to a theta, each column to a detector
   % thetas: a 1D array of thetas corresponding to each sinogram row
@@ -34,7 +34,7 @@ function out = ctIRadon( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
     @(x) any(validatestring(x,expectedTypes)) );
 
   p.parse( sinogram, thetas, dSize, cx, cy, Nx, Ny, ...
-  dx, dy, window, type );
+  dx, dy, varargin{:} );
   inputs = p.Results;
   type = inputs.type;
   window = inputs.window;

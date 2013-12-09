@@ -3,9 +3,9 @@ clear
 close all
 
 %dataDir = 'C:\Users\ndwork\Desktop\';
-dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
+%dataDir = 'C:\Users\ndwork\Documents\My Stuff\My School\Data\ctMetalArtifact\';
 %dataDir = 'C:\Users\Uzair\SkyDrive\Stanford Docs\EE 369C\Project\';
-%dataDir = '../data/';
+dataDir = '../data/';
 dataFile=[dataDir,'/Siemens_FromEdBoas/precalc_Hep.bin'];
 
 disp(['dataFile: ', dataFile]);
@@ -68,8 +68,9 @@ else
   sino=ctRadon(phant.im,delta,NumDet,dSize,thetas);
 end
 
+sizeSino=size(sino);
+
 %%
-%sizeSino=size(sino);
 %[rubbedSino,sinoMask]=rubOutSino(sino,50,thetas,sizeSino(2),dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
 %reconRubbed=ctIRadon(rubbedSino, thetas, dSize, 0, 0, 512, 512, delta, delta, 'Hanning');
 
@@ -79,23 +80,20 @@ end
 %figure('name','ctIRadon recon'),imshow(recon,[])
 
 %%
-%sizeSino=size(sino);
 %reconNonMetal=ctIRadonMetal(sino,thetas,dSize,0,0,512,512,delta,delta,'Hanning');
 %figure,imshow(reconNonMetal,[]);
 
 %%
-%sizeSino=size(sino);
 %marwavRecon=marWav(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning');
 %figure('name','marWav recon'), imshow( marwavRecon, [] );
 
 %%
-%sizeSino=size(sino);
 %marwavRadRecon=marWavRad(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning');
 %figure('name','marWavRad recon'), imshow( marwavRadRecon, [] );
 
 %%
-%sizeSino=size(sino);
-%marShearRadRecon=marShearRad(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta, 'Hanning');
+reconShearRad = marShearRad(sino,thetas,dSize,0,0,512,512,delta,delta, 'Hanning');
+save( 'reconShearRad.mat', 'reconShearRad' );
 %figure('name','marWavRad recon'), imshow( marwavRadRecon, [] );
 
 %%
@@ -106,10 +104,8 @@ end
 %reconMDTed=mdt(recon,50);
 
 %%
-%sizeSino=size(sino);
 %mardsRecon=marDS(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
 
 %%
-sizeSino=size(sino);
-mardsRecon=marCP(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
+%mardsRecon=marCP(sino,thetas,sizeSino(2),dSize,0,0,512,512,delta,delta,'Hanning');
 
